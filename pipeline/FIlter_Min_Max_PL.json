@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "FIlter_Min_Max_PL",
 	"properties": {
 		"activities": [
 			{
