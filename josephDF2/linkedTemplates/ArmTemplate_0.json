@@ -55,6 +55,49 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "firstName",
+						"type": "varchar"
+					},
+					{
+						"name": "lastName",
+						"type": "varchar"
+					},
+					{
+						"name": "filePath",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "employee"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -210,48 +253,14 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AzureSqlTable1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "firstName",
-						"type": "varchar"
-					},
-					{
-						"name": "lastName",
-						"type": "varchar"
-					},
-					{
-						"name": "filePath",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "employee"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/Test_PL')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Lookup1",
-						"type": "Lookup",
+						"name": "Copy data1",
+						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
@@ -263,22 +272,57 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
 							},
-							"dataset": {
-								"referenceName": "AzureSqlTable1",
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DelimitedText1",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
-						}
+						],
+						"outputs": [
+							{
+								"referenceName": "DelimitedText5",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
 				],
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]"
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText5')]"
 			]
 		},
 		{
@@ -295,20 +339,6 @@
 								"type": "DatasetReference"
 							},
 							"name": "source1"
-						},
-						{
-							"dataset": {
-								"referenceName": "DelimitedText3",
-								"type": "DatasetReference"
-							},
-							"name": "minValueSource"
-						},
-						{
-							"dataset": {
-								"referenceName": "DelimitedText4",
-								"type": "DatasetReference"
-							},
-							"name": "maxValueSource"
 						}
 					],
 					"sinks": [
@@ -322,25 +352,14 @@
 					],
 					"transformations": [
 						{
-							"name": "Lookup1"
-						},
-						{
-							"name": "Lookup2"
-						},
-						{
 							"name": "Filter1"
-						},
-						{
-							"name": "Filter2"
 						}
 					],
-					"script": "source(output(\n\t\tcolumn1 as short,\n\t\tcolumn2 as short,\n\t\tcolumn3 as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource(output(\n\t\tminValue as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> minValueSource\nsource(output(\n\t\tmaxValue as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> maxValueSource\nsource1, minValueSource lookup(column1 > minValue\n\t&& column2 > minValue\n\t&& column3 > minValue,\n\tmultiple: true,\n\tbroadcast: 'right',\n\tpickup: 'any')~> Lookup1\nFilter1, maxValueSource lookup(column1 < maxValue\n\t&& column2 < maxValue\n\t&& column3 < maxValue,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'right')~> Lookup2\nLookup1 filter(!isNull(minValue)) ~> Filter1\nLookup2 filter(!isNull(maxValue)) ~> Filter2\nFilter2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tmapColumn(\n\t\tcolumn1,\n\t\tcolumn2,\n\t\tcolumn3\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+					"script": "source(output(\n\t\tcolumn1 as short,\n\t\tcolumn2 as short,\n\t\tcolumn3 as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 filter(column1>30 && column1<100 && column2>35 && column2<95 && column3>40 && column3<90) ~> Filter1\nFilter1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
-				"[concat(variables('factoryId'), '/datasets/DelimitedText3')]",
-				"[concat(variables('factoryId'), '/datasets/DelimitedText4')]",
 				"[concat(variables('factoryId'), '/datasets/DelimitedText5')]"
 			]
 		},
@@ -369,8 +388,6 @@
 								"parameters": {},
 								"datasetParameters": {
 									"source1": {},
-									"minValueSource": {},
-									"maxValueSource": {},
 									"sink1": {}
 								}
 							},
