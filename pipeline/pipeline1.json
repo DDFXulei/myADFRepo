@@ -1,0 +1,38 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat(pipeline().parameters.URL,pipeline().parameters.YET_ANOTHER_PARAMETER)",
+						"type": "Expression"
+					},
+					"method": "GET"
+				}
+			}
+		],
+		"parameters": {
+			"URL": {
+				"type": "string",
+				"defaultValue": "http://localhost:8080/"
+			},
+			"YET_ANOTHER_PARAMETER": {
+				"type": "string",
+				"defaultValue": "2020-11-13"
+			}
+		},
+		"annotations": []
+	}
+}
