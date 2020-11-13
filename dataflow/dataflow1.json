@@ -10,20 +10,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
-				},
-				{
-					"dataset": {
-						"referenceName": "DelimitedText3",
-						"type": "DatasetReference"
-					},
-					"name": "minValueSource"
-				},
-				{
-					"dataset": {
-						"referenceName": "DelimitedText4",
-						"type": "DatasetReference"
-					},
-					"name": "maxValueSource"
 				}
 			],
 			"sinks": [
@@ -37,19 +23,10 @@
 			],
 			"transformations": [
 				{
-					"name": "Lookup1"
-				},
-				{
-					"name": "Lookup2"
-				},
-				{
 					"name": "Filter1"
-				},
-				{
-					"name": "Filter2"
 				}
 			],
-			"script": "source(output(\n\t\tcolumn1 as short,\n\t\tcolumn2 as short,\n\t\tcolumn3 as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource(output(\n\t\tminValue as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> minValueSource\nsource(output(\n\t\tmaxValue as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> maxValueSource\nsource1, minValueSource lookup(column1 > minValue\n\t&& column2 > minValue\n\t&& column3 > minValue,\n\tmultiple: true,\n\tbroadcast: 'right',\n\tpickup: 'any')~> Lookup1\nFilter1, maxValueSource lookup(column1 < maxValue\n\t&& column2 < maxValue\n\t&& column3 < maxValue,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'right')~> Lookup2\nLookup1 filter(!isNull(minValue)) ~> Filter1\nLookup2 filter(!isNull(maxValue)) ~> Filter2\nFilter2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tmapColumn(\n\t\tcolumn1,\n\t\tcolumn2,\n\t\tcolumn3\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+			"script": "source(output(\n\t\tcolumn1 as short,\n\t\tcolumn2 as short,\n\t\tcolumn3 as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 filter(column1>30 && column1<100 && column2>35 && column2<95 && column3>40 && column3<90) ~> Filter1\nFilter1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 		}
 	}
 }
