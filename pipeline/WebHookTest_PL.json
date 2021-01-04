@@ -1,0 +1,42 @@
+{
+	"name": "WebHookTest_PL",
+	"properties": {
+		"activities": [
+			{
+				"name": "WebHook1",
+				"type": "WebHook",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"url": "http://localhost:8888/",
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"body": {
+						"value": "@json(concat(concat('{\"key1\":\"',pipeline().parameters.param1,'\",'),concat('\"key2\":\"',pipeline().parameters.param2,'\",'),concat('\"key3\":\"',pipeline().parameters.param3,'\"}')))",
+						"type": "Expression"
+					},
+					"timeout": "00:10:00"
+				}
+			}
+		],
+		"parameters": {
+			"param1": {
+				"type": "string",
+				"defaultValue": "yhn"
+			},
+			"param2": {
+				"type": "string",
+				"defaultValue": "edc"
+			},
+			"param3": {
+				"type": "string",
+				"defaultValue": "tgb"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-11-17T06:37:13Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

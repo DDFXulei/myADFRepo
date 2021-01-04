@@ -1,0 +1,27 @@
+{
+	"name": "AzureSqlTable16",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "brand_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "brand_name",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "production",
+			"table": "brand_approvals"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

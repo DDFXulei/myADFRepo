@@ -1,0 +1,98 @@
+{
+	"name": "Remove_escape_PL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @json NVARCHAR(MAX);\nSET @json = N'[\n  {\"id\": 2, \"info\": {\"name\": \"John\", \"surname\": \"Smith\"}, \"age\": 25},\n  {\"id\": 5, \"info\": {\"name\": \"Jane\", \"surname\": \"Smith\"}, \"dob\": \"2005-11-04T12:00:00\"}\n]';\n\nSELECT *\nFROM OPENJSON(@json)",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable16",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup1').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Append variable1",
+							"type": "AppendVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Object",
+								"value": {
+									"value": "@json(item().value)",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Result",
+					"value": {
+						"value": "@variables('Object')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"Object": {
+				"type": "Array"
+			},
+			"Result": {
+				"type": "Array"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-11-06T11:29:31Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

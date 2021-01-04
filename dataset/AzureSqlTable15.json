@@ -1,0 +1,30 @@
+{
+	"name": "AzureSqlTable15",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "firstname",
+				"type": "varchar"
+			},
+			{
+				"name": "lastname",
+				"type": "varchar"
+			},
+			{
+				"name": "emp_date",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "employee"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

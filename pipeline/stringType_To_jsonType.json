@@ -1,0 +1,83 @@
+{
+	"name": "stringType_To_jsonType",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select \n'\n{\n\"id\": 1,\n\"Value\": \"January\" \n},\n' as json",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable18",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Res1",
+					"value": {
+						"value": "@activity('Lookup1').output.firstRow.json",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Append variable1",
+				"type": "AppendVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Res2",
+					"value": {
+						"value": "@json(variables('Res1'))",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"Res1": {
+				"type": "String"
+			},
+			"Res2": {
+				"type": "Array"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-11-26T06:25:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,38 @@
+{
+	"name": "dataflow4",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText28",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText26",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Aggregate1"
+				},
+				{
+					"name": "SurrogateKey1"
+				},
+				{
+					"name": "Aggregate2"
+				}
+			],
+			"script": "source(output(\n\t\tLoan_ID as string,\n\t\tloan_status as string,\n\t\tPrincipal as short,\n\t\tpartitions as short,\n\t\teffective_date as date,\n\t\tdue_date as date,\n\t\tpaid_off_time as timestamp,\n\t\tpast_due_days as short,\n\t\tage as short,\n\t\teducation as string,\n\t\tGender as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 aggregate(groupBy(partitions),\n\tagg_partitions = count()) ~> Aggregate1\nAggregate1 keyGenerate(output(row_count as long),\n\tstartAt: 1L) ~> SurrogateKey1\nSurrogateKey1 aggregate(row_count = max(row_count)) ~> Aggregate2\nAggregate2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Loan_agg.csv'],\n\ttruncate: true,\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tquoteAll: true) ~> sink1"
+		}
+	}
+}

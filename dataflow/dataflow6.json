@@ -1,0 +1,32 @@
+{
+	"name": "dataflow6",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText31",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable13",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DerivedColumn1"
+				}
+			],
+			"script": "source(output(\n\t\tid as string,\n\t\tClockingDate as string,\n\t\tClockingTime as string,\n\t\tCreationDate as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 derive(each(match(1==1&&name!='ClockingDate'&&name!='CreationDate'&&name!='ClockingTime'), $$ = iifNull($$,toString(null()))),\n\t\teach(match(name=='ClockingDate'), $$ = replace($$,'/','-')),\n\t\teach(match(name=='ClockingTime'), $$ = concat($$,':00.000')),\n\t\teach(match(name=='CreationDate'), $$ = replace(concat($$,':00.00'),'/','-'))) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\t{_id} as long,\n\t\tlog as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+		}
+	}
+}

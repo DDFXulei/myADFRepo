@@ -1,0 +1,27 @@
+{
+	"name": "AzureSqlTable9",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "product_type_id",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "product_type_name",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "porduct_type"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

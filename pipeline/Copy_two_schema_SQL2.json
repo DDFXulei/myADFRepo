@@ -1,0 +1,447 @@
+{
+	"name": "Copy_two_schema_SQL2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get Metadata1",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DelimitedText46",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Metadata1').output.childItems",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Get Metadata2",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "DelimitedText45",
+									"type": "DatasetReference"
+								},
+								"fieldList": [
+									"structure"
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Get Metadata2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(activity('Get Metadata2').output.structure[5].name,'Description')",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Copy data2",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "DelimitedTextSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": true
+												},
+												"formatSettings": {
+													"type": "DelimitedTextReadSettings"
+												}
+											},
+											"sink": {
+												"type": "AzureSqlSink"
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "Filename",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Filename",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Cost_Type",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "CostType",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Resource Type",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "ResourceType",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Group",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Group",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Sub-Group",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Subgroup",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Date",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Date",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Hours",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Hours",
+															"type": "Double",
+															"physicalType": "float"
+														}
+													},
+													{
+														"source": {
+															"name": "WBS Name",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "WBSName",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Activity Name",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Activity Name",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													}
+												],
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "DelimitedText45",
+												"type": "DatasetReference"
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "AzureSqlTable20",
+												"type": "DatasetReference"
+											}
+										]
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Copy data1",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "DelimitedTextSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": true
+												},
+												"formatSettings": {
+													"type": "DelimitedTextReadSettings"
+												}
+											},
+											"sink": {
+												"type": "AzureSqlSink"
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "Filename",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Filename",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Cost_Type",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "CostType",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "ResourceType",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "ResourceType",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Group",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Group",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Subgroup",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Subgroup",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Description",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Description",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Pay Class",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "PayClass",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "ResourceName",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "ResourceName",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Date",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Date",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "Hours",
+															"type": "String",
+															"physicalType": "String"
+														},
+														"sink": {
+															"name": "Hours",
+															"type": "Double",
+															"physicalType": "float"
+														}
+													}
+												],
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "DelimitedText45",
+												"type": "DatasetReference"
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "AzureSqlTable20",
+												"type": "DatasetReference"
+											}
+										]
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"FileName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-11-30T06:18:16Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,67 @@
+{
+	"name": "AzureSqlTable20",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase3",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Filename",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CostType",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ResourceType",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Group",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Subgroup",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Description",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PayClass",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ResourceName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Hours",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "WBSName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Activity Name",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "production",
+			"table": "T1"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

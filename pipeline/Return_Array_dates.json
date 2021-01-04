@@ -1,0 +1,97 @@
+{
+	"name": "Return_Array_dates",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": ";with temp as \n(\n\tselect CONVERT(varchar(100),'@{pipeline().parameters.startDate}', 110) as dt\nunion all \n\tselect CONVERT(varchar(100), DATEADD(day,1,dt), 110) from temp\n\twhere datediff(day,CONVERT(varchar(100), DATEADD(day,1,dt), 110),'@{pipeline().parameters.endDate}')>=0\n) select * from temp",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable24",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "dateArray",
+					"value": {
+						"value": "@activity('Lookup1').output.value",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var1",
+					"value": {
+						"value": "@variables('dateArray')[0].dt",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"startDate": {
+				"type": "string",
+				"defaultValue": "12-08-2020"
+			},
+			"endDate": {
+				"type": "string",
+				"defaultValue": "12-13-2020"
+			}
+		},
+		"variables": {
+			"dateArray": {
+				"type": "Array"
+			},
+			"var1": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-12-14T08:16:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

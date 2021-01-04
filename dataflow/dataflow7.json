@@ -1,0 +1,35 @@
+{
+	"name": "dataflow7",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Json17",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Json18",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Flatten1"
+				},
+				{
+					"name": "Aggregate1"
+				}
+			],
+			"script": "source(output(\n\t\tapplication as (version as string),\n\t\tcustom as (dimensions as (AppBuild as string, AppId as string, AppNamespace as string, CarrierCountry as string, CarrierName as string, CountryCode as string, EventId as string, IngressTimestamp as string, Locale as string, MessageType as string, OsApiLevel as string, OsBuild as string, OsName as string, OsVersion as double, Properties as string, ScreenSize as string, SdkName as string, SdkVersion as string, TimeZoneOffset as string, UserId as string, WrapperRuntimeVersion as string, WrapperSdkName as string, WrapperSdkVersion as string)[]),\n\t\tdata as (eventTime as string, isSynthetic as boolean, samplingRate as double),\n\t\tdevice as (deviceModel as string, deviceName as string, osVersion as string, type as string),\n\t\tlocation as (clientip as string, country as string),\n\t\toperation as (id as string, parentId as string),\n\t\tsession as (id as string, isFirst as boolean),\n\t\tuser as (anonId as string, isAuthenticated as boolean)\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'arrayOfDocuments') ~> source1\nsource1 foldDown(unroll(custom.dimensions, custom.dimensions),\n\tmapColumn(\n\t\tapplication,\n\t\tdata,\n\t\tdevice,\n\t\tuser,\n\t\tsession,\n\t\toperation,\n\t\tlocation,\n\t\tMessageType = custom.dimensions\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> Flatten1\nFlatten1 aggregate(groupBy(application,\n\t\tdata,\n\t\tdevice,\n\t\tuser,\n\t\tsession,\n\t\toperation,\n\t\tlocation),\n\tMessageType = max(MessageType)) ~> Aggregate1\nAggregate1 sink(input(\n\t\tid as string,\n\t\tusername as string,\n\t\tpassword as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}

@@ -1,0 +1,105 @@
+{
+	"name": "CopyPipeline_w79",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_w79",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "test//note.xml"
+					},
+					{
+						"name": "Destination",
+						"value": "output//"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "XmlSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "XmlReadSettings",
+							"validationMode": "none"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"validateDataConsistency": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['note']['to']"
+								},
+								"sink": {
+									"name": "to"
+								}
+							},
+							{
+								"source": {
+									"path": "$['note']['from']"
+								},
+								"sink": {
+									"name": "from"
+								}
+							},
+							{
+								"source": {
+									"path": "$['note']['heading']"
+								},
+								"sink": {
+									"name": "heading"
+								}
+							},
+							{
+								"source": {
+									"path": "$['note']['body']"
+								},
+								"sink": {
+									"name": "body"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_w79",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_w79",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-11-23T02:29:49Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

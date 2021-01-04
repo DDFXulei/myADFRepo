@@ -1,0 +1,64 @@
+{
+	"name": "pipeline3",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('Objects')",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "dataflow5",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "dataflow5",
+									"type": "DataFlowReference"
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Fine"
+							}
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"Objects": {
+				"type": "Array",
+				"defaultValue": [
+					{
+						"source": "nulValue.csv",
+						"sink": "TestNull"
+					},
+					{
+						"source": "nulValue2.csv",
+						"sink": "TestNull2"
+					}
+				]
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-10-23T07:27:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

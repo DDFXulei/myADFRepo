@@ -1,0 +1,32 @@
+{
+	"name": "dataflow3",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText24",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText23",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Select1"
+				}
+			],
+			"script": "parameters{\n\tTotal as string\n}\nsource(output(\n\t\tLoan_ID as string,\n\t\tloan_status as string,\n\t\tPrincipal as short,\n\t\tpartitions as short,\n\t\teffective_date as date,\n\t\tdue_date as date,\n\t\tpaid_off_time as timestamp,\n\t\tpast_due_days as short,\n\t\tage as short,\n\t\teducation as string,\n\t\tGender as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 select(mapColumn(\n\t\tLoan_ID,\n\t\tloan_status,\n\t\tPrincipal,\n\t\tpartitions,\n\t\teffective_date,\n\t\tdue_date,\n\t\tpaid_off_time,\n\t\tpast_due_days,\n\t\tage,\n\t\teducation,\n\t\tGender\n\t),\n\tpartitionBy('key',\n\t\t0,\n\t\tpartitions\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(input(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tfilePattern:(concat('Loan_payments_data[n]of',$Total)),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}

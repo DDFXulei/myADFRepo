@@ -9,21 +9,18 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "firstName",
+				"name": "identifier",
 				"type": "varchar"
 			},
 			{
-				"name": "lastName",
-				"type": "varchar"
-			},
-			{
-				"name": "filePath",
+				"name": "ICAO_code",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "employee"
+			"table": "pilot_airports"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

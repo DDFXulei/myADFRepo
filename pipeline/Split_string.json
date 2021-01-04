@@ -1,0 +1,55 @@
+{
+	"name": "Split_string",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "array",
+					"value": {
+						"value": "@split(variables('string1'),'(')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "array2",
+					"value": {
+						"value": "@split(variables('array')[1],')')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"string1": {
+				"type": "String",
+				"defaultValue": "String5 (String6) String7"
+			},
+			"array": {
+				"type": "Array"
+			},
+			"array2": {
+				"type": "Array"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-12-10T06:19:51Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

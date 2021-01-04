@@ -1,0 +1,98 @@
+{
+	"name": "FLattern_Json_PL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"maxRowsPerFile": 1,
+							"quoteAllText": true,
+							"fileExtension": ".csv"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['ContactId']"
+								},
+								"sink": {
+									"name": "ContactId"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Name']['FirstName']"
+								},
+								"sink": {
+									"name": "FirstName"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Name']['FullName']"
+								},
+								"sink": {
+									"name": "FullName"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Name']['LastName']"
+								},
+								"sink": {
+									"name": "LastName"
+								}
+							}
+						],
+						"collectionReference": ""
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Json15",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DelimitedText34",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-11-02T01:51:50Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText1",
+						"referenceName": "DelimitedText19",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText5",
+						"referenceName": "AzureSqlTable10",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -23,10 +23,10 @@
 			],
 			"transformations": [
 				{
-					"name": "Filter1"
+					"name": "DerivedColumn1"
 				}
 			],
-			"script": "source(output(\n\t\tcolumn1 as short,\n\t\tcolumn2 as short,\n\t\tcolumn3 as short\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 filter(column1>30 && column1<100 && column2>35 && column2<95 && column3>40 && column3<90) ~> Filter1\nFilter1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+			"script": "source(output(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 derive(each(match(1==1), $$ = iifNull($$,toString(null())))) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tColumn1 as string,\n\t\tColumn2 as string,\n\t\tColumn3 as string,\n\t\tColumn4 as timestamp,\n\t\tColumn5 as string,\n\t\tColumn6 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tColumn1 = Column_1,\n\t\tColumn2 = Column_2,\n\t\tColumn3 = Column_3,\n\t\tColumn4 = Column_4,\n\t\tColumn5 = Column_5,\n\t\tColumn6 = Column_6\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
 		}
 	}
 }

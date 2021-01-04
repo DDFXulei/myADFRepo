@@ -3,8 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Web1",
-				"type": "WebActivity",
+				"name": "Copy data1",
+				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -15,24 +15,45 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": {
-						"value": "@concat(pipeline().parameters.URL,pipeline().parameters.YET_ANOTHER_PARAMETER)",
-						"type": "Expression"
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
 					},
-					"method": "GET"
-				}
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText19",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlTable10",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
-		"parameters": {
-			"URL": {
-				"type": "string",
-				"defaultValue": "http://localhost:8080/"
-			},
-			"YET_ANOTHER_PARAMETER": {
-				"type": "string",
-				"defaultValue": "2020-11-13"
-			}
-		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2020-10-23T06:50:53Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

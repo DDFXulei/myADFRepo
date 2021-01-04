@@ -1,0 +1,41 @@
+{
+	"name": "Json15",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Delta.json",
+				"fileSystem": "input"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"ContactId": {
+					"type": "string"
+				},
+				"Name": {
+					"type": "object",
+					"properties": {
+						"FirstName": {
+							"type": "string"
+						},
+						"FullName": {
+							"type": "string"
+						},
+						"LastName": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

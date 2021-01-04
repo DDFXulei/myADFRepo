@@ -1,0 +1,126 @@
+{
+	"name": "Json17",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "data_flatern.json",
+				"fileSystem": "input"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"application": {
+					"type": "object",
+					"properties": {
+						"version": {
+							"type": "string"
+						}
+					}
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"eventTime": {
+							"type": "string"
+						},
+						"isSynthetic": {
+							"type": "boolean"
+						},
+						"samplingRate": {
+							"type": "number"
+						}
+					}
+				},
+				"device": {
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string"
+						},
+						"osVersion": {
+							"type": "string"
+						},
+						"deviceName": {
+							"type": "string"
+						},
+						"deviceModel": {
+							"type": "string"
+						},
+						"screenResolution": {
+							"type": "object"
+						}
+					}
+				},
+				"user": {
+					"type": "object",
+					"properties": {
+						"anonId": {
+							"type": "string"
+						},
+						"isAuthenticated": {
+							"type": "boolean"
+						}
+					}
+				},
+				"session": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"isFirst": {
+							"type": "boolean"
+						}
+					}
+				},
+				"operation": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"parentId": {
+							"type": "string"
+						}
+					}
+				},
+				"location": {
+					"type": "object",
+					"properties": {
+						"clientip": {
+							"type": "string"
+						},
+						"country": {
+							"type": "string"
+						}
+					}
+				},
+				"custom": {
+					"type": "object",
+					"properties": {
+						"dimensions": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"MessageType": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,19 @@
+{
+	"name": "SourceDataset_w79",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Xml",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "note.xml",
+				"container": "test"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

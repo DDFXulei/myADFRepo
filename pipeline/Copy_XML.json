@@ -1,0 +1,81 @@
+{
+	"name": "Copy_XML",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "XmlSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": false
+						},
+						"formatSettings": {
+							"type": "XmlReadSettings",
+							"validationMode": "xsd",
+							"detectDataType": true,
+							"namespaces": true
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"sqlWriterStoredProcedureName": "[dbo].[spUpsertPolit]",
+						"sqlWriterTableType": "ct_pilot_type",
+						"storedProcedureTableTypeParameterName": "polit"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['Date']['Identification']['Identifier']"
+								},
+								"sink": {
+									"name": "identifier",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Date']['Pilot']['AirportICAOCode']"
+								},
+								"sink": {
+									"name": "ICAO_code",
+									"type": "String"
+								}
+							}
+						],
+						"collectionReference": ""
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Xml1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-11-18T07:51:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,72 @@
+{
+	"name": "DelimitedText52",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@item().name",
+					"type": "Expression"
+				},
+				"fileSystem": "test7"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Filename",
+				"type": "String"
+			},
+			{
+				"name": "Cost_Type",
+				"type": "String"
+			},
+			{
+				"name": "Principal",
+				"type": "String"
+			},
+			{
+				"name": "ResourceType",
+				"type": "String"
+			},
+			{
+				"name": "Group",
+				"type": "String"
+			},
+			{
+				"name": "Subgroup",
+				"type": "String"
+			},
+			{
+				"name": "Description",
+				"type": "String"
+			},
+			{
+				"name": "Pay Class",
+				"type": "String"
+			},
+			{
+				"name": "ResourceName",
+				"type": "String"
+			},
+			{
+				"name": "Date",
+				"type": "String"
+			},
+			{
+				"name": "Hours",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
