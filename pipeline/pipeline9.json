@@ -1,6 +1,7 @@
 {
 	"name": "pipeline9",
 	"properties": {
+		"description": "Copy data to ADL v2 container > silver",
 		"activities": [
 			{
 				"name": "Copy data to silver",
