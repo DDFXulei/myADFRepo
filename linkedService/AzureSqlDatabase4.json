@@ -1,15 +1,11 @@
 {
-	"name": "FtpServer1",
+	"name": "AzureSqlDatabase4",
 	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"annotations": [],
-		"type": "FtpServer",
+		"type": "AzureSqlDatabase",
 		"typeProperties": {
-			"host": "172.17.31.50",
-			"port": 21,
-			"enableSsl": false,
-			"enableServerCertificateValidation": false,
-			"authenticationType": "Anonymous"
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=josephserver2.database.windows.net;Initial Catalog=josephsql"
 		},
 		"connectVia": {
 			"referenceName": "integrationRuntime2",

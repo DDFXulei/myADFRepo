@@ -15,7 +15,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "File_Names"
+			"table": "Copy_Logs"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

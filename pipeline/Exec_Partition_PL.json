@@ -1,0 +1,35 @@
+{
+	"name": "Exec_Partition_PL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Partition_Files_PL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"variables": {
+			"Activites": {
+				"type": "Array",
+				"defaultValue": [
+					"Copy1",
+					"Copy2"
+				]
+			},
+			"Query": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-10-22T06:09:53Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -6,7 +6,7 @@
 		"type": "SqlServer",
 		"typeProperties": {
 			"connectionString": "integrated security=False;data source=wx-84493;initial catalog=JosephSub;user id=sa",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIzODRhNzA3My1iZThkLTQxMWUtOGFjNC0yYWNlMWJlNjlmZDQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJmN2VjMzkzOC1iMWRjLTQ0OGQtOTZlMC1hZjVmNDY3YjFmMDUiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "integrationRuntime2",

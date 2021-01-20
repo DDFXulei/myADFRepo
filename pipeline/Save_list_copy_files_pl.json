@@ -23,7 +23,7 @@
 						"childItems"
 					],
 					"storeSettings": {
-						"type": "AzureBlobFSReadSettings",
+						"type": "FileServerReadSettings",
 						"recursive": true
 					},
 					"formatSettings": {
@@ -50,9 +50,46 @@
 					},
 					"activities": [
 						{
-							"name": "Copy-Files",
-							"type": "Copy",
+							"name": "Get Metadata2",
+							"type": "GetMetadata",
 							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "DelimitedText61",
+									"type": "DatasetReference"
+								},
+								"fieldList": [
+									"lastModified"
+								],
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							}
+						},
+						{
+							"name": "CopyFiles_To_Azure",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Get Metadata2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "7.00:00:00",
 								"retry": 0,
@@ -65,8 +102,9 @@
 								"source": {
 									"type": "DelimitedTextSource",
 									"storeSettings": {
-										"type": "AzureBlobFSReadSettings",
-										"recursive": true
+										"type": "FileServerReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
 									},
 									"formatSettings": {
 										"type": "DelimitedTextReadSettings"
@@ -95,23 +133,23 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "DelimitedText55",
+									"referenceName": "DelimitedText61",
 									"type": "DatasetReference"
 								}
 							],
 							"outputs": [
 								{
-									"referenceName": "DelimitedText56",
+									"referenceName": "DelimitedText62",
 									"type": "DatasetReference"
 								}
 							]
 						},
 						{
-							"name": "Create_Log_Table",
+							"name": "Create_Logs",
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "Copy-Files",
+									"activity": "CopyFiles_To_Azure",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -129,7 +167,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "select '@{item().name}' as Copy_File_Name",
+										"value": "select '@{item().name}' as Copy_File_Name, '@{activity('Get Metadata2').output.lastModified}' as Last_modified",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
@@ -166,7 +204,7 @@
 			}
 		],
 		"annotations": [],
-		"lastPublishTime": "2020-12-11T01:09:05Z"
+		"lastPublishTime": "2021-01-11T02:30:13Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

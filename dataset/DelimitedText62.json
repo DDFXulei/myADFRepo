@@ -2,7 +2,7 @@
 	"name": "DelimitedText62",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorage1",
+			"referenceName": "AzureDataLakeStorage2",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,22 +10,13 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileSystem": "silver"
+				"fileSystem": "test11"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"type": "String"
-			},
-			{
-				"type": "String"
-			},
-			{
-				"type": "String"
-			}
-		]
-	}
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
