@@ -1,0 +1,23 @@
+{
+	"name": "pipeline11",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Var1",
+					"value": "1"
+				}
+			}
+		],
+		"variables": {
+			"Var1": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
