@@ -47,7 +47,17 @@
 							"inputs": [
 								{
 									"referenceName": "SqlServerTable2",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"server": {
+											"value": "@item().server",
+											"type": "Expression"
+										},
+										"db": {
+											"value": "@item().db",
+											"type": "Expression"
+										}
+									}
 								}
 							],
 							"outputs": [
