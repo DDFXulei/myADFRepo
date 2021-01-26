@@ -5,10 +5,24 @@
 			"referenceName": "SqlServer1",
 			"type": "LinkedServiceReference",
 			"parameters": {
-				"server1": "wx-84493",
-				"db1": "JosephSub",
-				"server2": "wx-84494",
-				"db2": "JosephSub"
+				"server": {
+					"value": "@dataset().serverName",
+					"type": "Expression"
+				},
+				"db": {
+					"value": "@dataset().dbName",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"serverName": {
+				"type": "string",
+				"defaultValue": "wx-84493"
+			},
+			"dbName": {
+				"type": "string",
+				"defaultValue": "JosephSub"
 			}
 		},
 		"annotations": [],
