@@ -1,0 +1,36 @@
+{
+	"name": "SqlServerTable2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SqlServer1",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"server1": "wx-84493",
+				"db1": "JosephSub",
+				"server2": "wx-84494",
+				"db2": "JosephSub"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "Id",
+				"type": "uniqueidentifier"
+			},
+			{
+				"name": "Timestamp",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "PreviousObjects",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ExampleTable"
+		}
+	}
+}
