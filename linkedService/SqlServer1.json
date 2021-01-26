@@ -3,11 +3,11 @@
 	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"parameters": {
-			"server1": {
+			"server": {
 				"type": "string",
 				"defaultValue": "wx-84493"
 			},
-			"db1": {
+			"db": {
 				"type": "string",
 				"defaultValue": "JosephSub"
 			}
@@ -15,8 +15,8 @@
 		"annotations": [],
 		"type": "SqlServer",
 		"typeProperties": {
-			"connectionString": "integrated security=False;data source=@{linkedService().server1};initial catalog=@{linkedService().db1};user id=sa",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI2NjUwNjI5Zi1mODdhLTRmMDAtYTZhNS1kMDdhYmU2OWQzMDEiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"connectionString": "integrated security=False;data source=@{linkedService().server};initial catalog=@{linkedService().db};user id=sa",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIyMWJhMTM5ZC03ZmQyLTQ3MTAtYTY4Yi03MmMyZDk0YWYyOTQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "integrationRuntime2",
