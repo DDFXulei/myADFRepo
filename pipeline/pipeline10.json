@@ -3,39 +3,91 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
-				"type": "Copy",
+				"name": "ForEach1",
+				"type": "ForEach",
 				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
+					"items": {
+						"value": "@pipeline().parameters.servers",
+						"type": "Expression"
 					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "SqlServerTable2",
-						"type": "DatasetReference"
-					}
-				]
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AzureSqlSink"
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "SqlServerTable2",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "AzureSqlTable25",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
-			"server": {
-				"type": "string"
+			"servers": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"server": "wx-84493",
+						"db": "JosephSub"
+					},
+					{
+						"server": "wx-844934",
+						"db": "JosephSub"
+					}
+				]
+			}
+		},
+		"variables": {
+			"var_server": {
+				"type": "String",
+				"defaultValue": "wx-84493"
 			},
-			"db": {
-				"type": "string"
+			"var_db": {
+				"type": "String",
+				"defaultValue": "JosephSub"
+			},
+			"var_server_arr": {
+				"type": "String",
+				"defaultValue": "[{\"server\":\"wx-84493\",\"db\":\"JosephSub\"},{\"server\":\"wx-844934\",\"db\":\"JosephSub\"}]"
 			}
 		},
 		"annotations": []
