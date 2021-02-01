@@ -1,0 +1,11 @@
+{
+	"name": "pipeline11",
+	"properties": {
+		"variables": {
+			"myVar1": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
